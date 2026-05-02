@@ -39,13 +39,12 @@ MySQL Database
 ---
 ## How it work ?
 ```text
-1. User login
-2. WebSocket connection starts
-3. User sends message
-4. Server:
-   → Broadcasts message instantly to all connected clients
-   → Saves message in database using JDBC
-5. Receiver gets message in real-time
+one to one chat ( private chat )
+1. User logs in and opens a real-time WebSocket connection to the server.
+2. User selects a friend and sends a message.
+3. Server receives it and saves it to the database.
+4. Server instantly routes the message privately to the friend's WebSocket.
+5. The friend receives the message in real-time.
 ```
 ---
 ## Folder Structure
