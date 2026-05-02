@@ -1,0 +1,4 @@
+-- Show username/password fields
+-- Login button
+-- Display errors (wrong password, etc.)
+-- Call LoginController
