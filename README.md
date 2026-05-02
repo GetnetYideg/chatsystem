@@ -50,29 +50,97 @@ MySQL Database
 ---
 ## Folder Structure
 ```bash
-chat-app/
+chatsystem/
 │
-├── server/                    
-│   ├── src/
-│   │   └── com/chatapp/server/
-│   │       ├── MainServer.java
-│   │       ├── websocket/
-│   │       ├── service/
-│   │       ├── model/
-│   │       └── database/
+├── docs/
+│   └── database/
+│       └── docs.md
 │
-├── client/                    
-│   ├── src/
-│   │   └── com/chatapp/client/
-│   │       ├── MainApp.java
-│   │       ├── controller/
-│   │       ├── ui/
-│   │       └── websocket/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   ├── com/example/chatsystem/
+│       │   │
+│       │   │   ├── ChatClient.java
+│       │   ├── ChatServer.java
+│       │   ├── module-info.java
+│       │
+│       │   ├── client/
+│       │   │   ├── controller/
+│       │   │   │   ├── ChatController.java
+│       │   │   │   ├── LoginController.java
+│       │   │   │   └── RoomController.java
+│       │   │   │
+│       │   │   ├── models/
+│       │   │   │   ├── message.java
+│       │   │   │   └── userModel.java
+│       │   │   │
+│       │   │   ├── service/
+│       │   │   │   ├── AuthClientService.java
+│       │   │   │   └── ChatClientService.java
+│       │   │   │
+│       │   │   ├── ui/
+│       │   │   │   ├── ChatScreen.java
+│       │   │   │   ├── LoginScreen.java
+│       │   │   │   └── RoomScreen.java
+│       │   │   │
+│       │   │   ├── util/
+│       │   │   │   ├── Constants.java
+│       │   │   │   └── jsonParser.java
+│       │   │   │
+│       │   │   └── websocket/
+│       │   │       ├── clientWebSocket.java
+│       │   │       └── messageListener.java
+│       │   │
+│       │   └── server/
+│       │       ├── config/
+│       │       │   ├── ServerConfig.java
+│       │       │   └── webSocketconfig.java
+│       │       │
+│       │       ├── database/
+│       │       │   ├── DBConnection.java
+│       │       │   └── Databasemanager.java
+│       │       │
+│       │       ├── model/
+│       │       │   ├── chatRoom.java
+│       │       │   ├── messages.java
+│       │       │   └── users.java
+│       │       │
+│       │       ├── repository/
+│       │       │   ├── chatRoomRepository.java
+│       │       │   ├── messageRepository.java
+│       │       │   └── userRepository.java
+│       │       │
+│       │       ├── service/
+│       │       │   ├── AuthService.java
+│       │       │   ├── ChatService.java
+│       │       │   └── UserService.java
+│       │       │
+│       │       └── websocket/
+│       │           ├── ChatWebSocketHandler.java
+│       │           ├── MessageRouter.java
+│       │           └── SessionManager.java
+│       │
+│       └── resources/
+│           ├── com/example/chatsystem/
+│           │   └── hello-view.fxml
+│           │
+│           └── database/
+│               ├── schema.sql
+│               └── seed.sql
 │
-├── database/
-│   └── schema.sql
+├── target/
+│   └── classes/
+│       └── com/example/chatsystem/
+│           ├── client/
+│           └── server/
 │
-└── README.md
+├── .idea/
+├── .mvn/
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── .gitignore
 ```
 ---
 
