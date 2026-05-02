@@ -39,7 +39,7 @@ MySQL Database
 ---
 ## How it work ?
 ```text
-1. User logs in
+1. User login
 2. WebSocket connection starts
 3. User sends message
 4. Server:
@@ -75,9 +75,31 @@ chat-app/
 └── README.md
 ```
 ---
-```text
-🏁 Conclusion
 
+## 🗄️ Database Schema
+
+### 👤 Users Table
+
+| Field    | Type     |
+|----------|----------|
+| id       | INT (PK) |
+| username | VARCHAR  |
+| password | VARCHAR  |
+
+---
+
+### 💬 Messages Table
+
+| Field       | Type     |
+|-------------|----------|
+| id          | INT (PK) |
+| sender_id   | INT      |
+| receiver_id | INT      |
+| message     | TEXT     |
+| timestamp   | DATETIME |
+
+## 🏁 Conclusion
+```text
 This project demonstrates a real-world chat system architecture using:
 
 JavaFX for UI
