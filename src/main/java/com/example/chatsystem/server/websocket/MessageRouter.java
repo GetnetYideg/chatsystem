@@ -1,16 +1,19 @@
-/*
-Routes messages to the correct place:
-
- - Sends message to a specific user
- - Broadcasts to a chat room
- - Handles private vs group messages
-
-👉 Think: “message delivery system”
-
-*/
-
 package com.example.chatsystem.server.websocket;
 
+import org.java_websocket.WebSocket;
+import java.util.Collection;
+
 public class MessageRouter {
-    
+    private SessionManager sessionManager;
+
+    public MessageRouter(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    public void broadcast(String message) {
+        Collection<WebSocket> connections = sessionManager.getAllConnections();
+        for (WebSocket conn : connections) {
+            conn.send(message);
+        }
+    }
 }
