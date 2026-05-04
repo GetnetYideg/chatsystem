@@ -5,6 +5,7 @@ module com.example.chatsystem {
     requires java.sql;
     requires org.java_websocket;
     requires org.json;
+    requires io.github.cdimascio.dotenv.java;
 
     opens com.example.chatsystem to javafx.fxml;
     exports com.example.chatsystem;

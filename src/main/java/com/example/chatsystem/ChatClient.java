@@ -18,7 +18,7 @@ public class ChatClient extends Application {
     public void start(Stage stage) throws Exception {
         this.primaryStage = stage;
         this.primaryStage.setTitle("Chat System - Login");
-        
+         
         showLoginScreen();
         this.primaryStage.show();
     }
