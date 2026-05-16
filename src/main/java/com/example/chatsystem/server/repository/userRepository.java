@@ -67,4 +67,27 @@ public class userRepository {
         }
         return null;
     }
+
+    public java.util.List<users> getChattedUsers(int userId) {
+        java.util.List<users> list = new java.util.ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) return list;
+
+        String query = "SELECT DISTINCT u.id, u.username, u.password FROM Users u " +
+                       "JOIN Messages m ON (u.id = m.sender_id OR u.id = m.receiver_id) " +
+                       "WHERE (m.sender_id = ? OR m.receiver_id = ?) AND u.id != ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, userId);
+            pstmt.setInt(3, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new users(rs.getInt("id"), rs.getString("username"), rs.getString("password")));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

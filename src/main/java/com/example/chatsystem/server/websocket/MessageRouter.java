@@ -16,4 +16,11 @@ public class MessageRouter {
             conn.send(message);
         }
     }
+
+    public void routeToUser(int receiverId, String message) {
+        WebSocket conn = sessionManager.getConnectionByUserId(receiverId);
+        if (conn != null) {
+            conn.send(message);
+        }
+    }
 }

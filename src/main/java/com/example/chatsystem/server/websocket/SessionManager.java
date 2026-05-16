@@ -33,4 +33,13 @@ public class SessionManager {
     public Collection<users> getAllUsers() {
         return activeSessions.values();
     }
+    
+    public WebSocket getConnectionByUserId(int userId) {
+        for (java.util.Map.Entry<WebSocket, users> entry : activeSessions.entrySet()) {
+            if (entry.getValue().getId() == userId) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 }

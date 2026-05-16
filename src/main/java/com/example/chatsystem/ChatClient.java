@@ -1,10 +1,12 @@
 package com.example.chatsystem;
 
-import com.example.chatsystem.client.controller.ChatController;
+import com.example.chatsystem.client.controller.DashboardController;
 import com.example.chatsystem.client.controller.LoginController;
+import com.example.chatsystem.client.controller.PeerChatController;
 import com.example.chatsystem.client.models.userModel;
-import com.example.chatsystem.client.ui.ChatScreen;
+import com.example.chatsystem.client.ui.DashboardScreen;
 import com.example.chatsystem.client.ui.LoginScreen;
+import com.example.chatsystem.client.ui.PeerChatScreen;
 import com.example.chatsystem.client.websocket.clientWebSOcket;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -17,26 +19,43 @@ public class ChatClient extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.primaryStage = stage;
-        this.primaryStage.setTitle("Chat System - Login");
-         
         showLoginScreen();
         this.primaryStage.show();
     }
 
+    // ── Login ─────────────────────────────────────────────────────────────────
     public void showLoginScreen() {
         LoginController loginController = new LoginController(this);
         LoginScreen loginScreen = new LoginScreen(loginController);
         primaryStage.setScene(loginScreen.getScene());
-        primaryStage.setTitle("Chat System - Login");
+        primaryStage.setTitle("ChatSystem — Login");
     }
 
+    // ── Dashboard ─────────────────────────────────────────────────────────────
+    public void showDashboard() {
+        DashboardController controller = new DashboardController(this);
+        DashboardScreen screen = new DashboardScreen(controller);
+        primaryStage.setScene(screen.getScene());
+        primaryStage.setTitle("ChatSystem — " + currentUser.getUsername());
+    }
+
+    // ── Peer-to-peer chat ─────────────────────────────────────────────────────
+    public void showPeerChatScreen(userModel peer) {
+        PeerChatController controller = new PeerChatController(this, peer);
+        PeerChatScreen screen = new PeerChatScreen(controller);
+        primaryStage.setScene(screen.getScene());
+        primaryStage.setTitle("ChatSystem — " + currentUser.getUsername() + " ↔ " + peer.getUsername());
+    }
+
+    /**
+     * Legacy method kept so LoginController still compiles unchanged.
+     * After login, users now land on the dashboard.
+     */
     public void showChatScreen() {
-        ChatController chatController = new ChatController(this);
-        ChatScreen chatScreen = new ChatScreen(chatController);
-        primaryStage.setScene(chatScreen.getScene());
-        primaryStage.setTitle("Chat System - Chatting as " + currentUser.getUsername());
+        showDashboard();
     }
 
+    // ── User ──────────────────────────────────────────────────────────────────
     public void setCurrentUser(int id, String username) {
         this.currentUser = new userModel(id, username);
     }

@@ -1,20 +1,24 @@
 package com.example.chatsystem.server.websocket;
 
+import com.example.chatsystem.server.repository.userRepository;
 import com.example.chatsystem.server.service.AuthService;
 import com.example.chatsystem.server.service.ChatService;
 import com.example.chatsystem.server.model.users;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 public class ChatWebSocketHandler extends WebSocketServer {
     private SessionManager sessionManager;
     private MessageRouter messageRouter;
     private AuthService authService;
     private ChatService chatService;
+    private userRepository userRepo;
 
     public ChatWebSocketHandler(int port) {
         super(new InetSocketAddress(port));
@@ -22,6 +26,7 @@ public class ChatWebSocketHandler extends WebSocketServer {
         this.messageRouter = new MessageRouter(sessionManager);
         this.authService = new AuthService();
         this.chatService = new ChatService();
+        this.userRepo = new userRepository();
     }
 
     @Override
@@ -50,6 +55,10 @@ public class ChatWebSocketHandler extends WebSocketServer {
                 handleAuth(conn, json, type);
             } else if ("CHAT".equals(type)) {
                 handleChat(conn, json);
+            } else if ("GET_CONTACTS".equals(type)) {
+                handleGetContacts(conn, json);
+            } else if ("FIND_USER".equals(type)) {
+                handleFindUser(conn, json);
             }
         } catch (Exception e) {
             System.err.println("Failed to process message: " + e.getMessage());
@@ -98,6 +107,47 @@ public class ChatWebSocketHandler extends WebSocketServer {
                 messageRouter.broadcast(json.toString());
             }
         }
+    }
+
+    // ── GET_CONTACTS ──────────────────────────────────────────────────────────
+    private void handleGetContacts(WebSocket conn, JSONObject json) {
+        int userId = json.optInt("user_id", -1);
+        if (userId == -1) return;
+
+        List<users> contacts = userRepo.getChattedUsers(userId);
+        JSONArray arr = new JSONArray();
+        for (users u : contacts) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", u.getId());
+            obj.put("username", u.getUsername());
+            arr.put(obj);
+        }
+        JSONObject response = new JSONObject();
+        response.put("type", "CONTACTS_RESPONSE");
+        response.put("contacts", arr);
+        conn.send(response.toString());
+    }
+
+    // ── FIND_USER ─────────────────────────────────────────────────────────────
+    private void handleFindUser(WebSocket conn, JSONObject json) {
+        String username = json.optString("username", "");
+        JSONObject response = new JSONObject();
+        response.put("type", "FIND_USER_RESPONSE");
+        response.put("username", username);
+
+        if (username.isEmpty()) {
+            response.put("found", false);
+        } else {
+            users found = userRepo.findByUsername(username);
+            if (found != null) {
+                response.put("found", true);
+                response.put("user_id", found.getId());
+                response.put("username", found.getUsername());
+            } else {
+                response.put("found", false);
+            }
+        }
+        conn.send(response.toString());
     }
 
     @Override
