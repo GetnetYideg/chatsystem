@@ -17,4 +17,8 @@ public class Constants {
     public static final String MSG_TYPE_CONTACTS_RESPONSE = "CONTACTS_RESPONSE";
     public static final String MSG_TYPE_FIND_USER         = "FIND_USER";
     public static final String MSG_TYPE_FIND_USER_RESPONSE= "FIND_USER_RESPONSE";
+
+    // Chat history
+    public static final String MSG_TYPE_GET_HISTORY       = "GET_HISTORY";
+    public static final String MSG_TYPE_HISTORY_RESPONSE  = "HISTORY_RESPONSE";
 }

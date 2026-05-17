@@ -3,6 +3,7 @@ package com.example.chatsystem.server.websocket;
 import com.example.chatsystem.server.repository.userRepository;
 import com.example.chatsystem.server.service.AuthService;
 import com.example.chatsystem.server.service.ChatService;
+import com.example.chatsystem.server.model.messages;
 import com.example.chatsystem.server.model.users;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
@@ -59,6 +60,8 @@ public class ChatWebSocketHandler extends WebSocketServer {
                 handleGetContacts(conn, json);
             } else if ("FIND_USER".equals(type)) {
                 handleFindUser(conn, json);
+            } else if ("GET_HISTORY".equals(type)) {
+                handleGetHistory(conn, json);
             }
         } catch (Exception e) {
             System.err.println("Failed to process message: " + e.getMessage());
@@ -150,6 +153,29 @@ public class ChatWebSocketHandler extends WebSocketServer {
         conn.send(response.toString());
     }
 
+    // ── GET_HISTORY ───────────────────────────────────────────────────────────
+    private void handleGetHistory(WebSocket conn, JSONObject json) {
+        int userId1 = json.optInt("user_id", -1);
+        int userId2 = json.optInt("peer_id", -1);
+        if (userId1 == -1 || userId2 == -1) return;
+
+        List<messages> history = chatService.getChatHistory(userId1, userId2);
+        JSONArray arr = new JSONArray();
+        for (messages msg : history) {
+            JSONObject obj = new JSONObject();
+            obj.put("sender_id", msg.getSenderId());
+            obj.put("receiver_id", msg.getReceiverId());
+            obj.put("message", msg.getMessage());
+            obj.put("timestamp", msg.getTimestamp() != null ? msg.getTimestamp().toString() : "");
+            arr.put(obj);
+        }
+        JSONObject response = new JSONObject();
+        response.put("type", "HISTORY_RESPONSE");
+        response.put("peer_id", userId2);
+        response.put("messages", arr);
+        conn.send(response.toString());
+    }
+
     @Override
     public void onError(WebSocket conn, Exception ex) {
         ex.printStackTrace();
@@ -160,3 +186,4 @@ public class ChatWebSocketHandler extends WebSocketServer {
         System.out.println("WebSocket Server started on port " + getPort());
     }
 }
+ 

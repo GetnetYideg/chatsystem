@@ -28,6 +28,10 @@ public class PeerChatController implements messageListener {
 
     public void setScreen(PeerChatScreen screen) {
         this.screen = screen;
+        userModel me = app.getCurrentUser();
+        if (me != null && peer != null) {
+            chatService.requestChatHistory(me.getId(), peer.getId());
+        }
     }
 
     public userModel getPeer() {
@@ -60,7 +64,26 @@ public class PeerChatController implements messageListener {
     public void onMessageReceived(JSONObject json) {
         String type = json.optString("type", "");
 
-        if (Constants.MSG_TYPE_CHAT.equals(type)) {
+        if (Constants.MSG_TYPE_HISTORY_RESPONSE.equals(type)) {
+            int respPeerId = json.optInt("peer_id", -1);
+            if (peer != null && respPeerId == peer.getId()) {
+                org.json.JSONArray messagesArr = json.optJSONArray("messages");
+                if (messagesArr != null && screen != null) {
+                    userModel me = app.getCurrentUser();
+                    for (int i = 0; i < messagesArr.length(); i++) {
+                        JSONObject msgObj = messagesArr.getJSONObject(i);
+                        int senderId = msgObj.optInt("sender_id", -1);
+                        String message = msgObj.optString("message", "");
+                        
+                        if (me != null && senderId == me.getId()) {
+                            screen.appendSentMessage(message);
+                        } else {
+                            screen.appendReceivedMessage(peer.getUsername(), message);
+                        }
+                    }
+                }
+            }
+        } else if (Constants.MSG_TYPE_CHAT.equals(type)) {
             int senderId = json.optInt("sender_id", -1);
             String senderUsername = json.optString("sender_username", "Unknown");
             String message = json.optString("message", "");

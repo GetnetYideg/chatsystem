@@ -3,6 +3,8 @@ package com.example.chatsystem.server.service;
 import com.example.chatsystem.server.model.messages;
 import com.example.chatsystem.server.repository.messageRepository;
 
+import java.util.List;
+
 public class ChatService {
     private messageRepository msgRepo;
 
@@ -16,5 +18,9 @@ public class ChatService {
         msg.setReceiverId(receiverId);
         msg.setMessage(text);
         return msgRepo.saveMessage(msg);
+    }
+
+    public List<messages> getChatHistory(int userId1, int userId2) {
+        return msgRepo.getMessagesBetween(userId1, userId2);
     }
 }

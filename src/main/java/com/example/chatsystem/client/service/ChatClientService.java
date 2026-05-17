@@ -11,4 +11,14 @@ public class ChatClientService {
             client.send(json);
         }
     }
+    public void requestChatHistory(int userId, int peerId) {
+        org.json.JSONObject json = new org.json.JSONObject();
+        json.put("type", com.example.chatsystem.client.util.Constants.MSG_TYPE_GET_HISTORY);
+        json.put("user_id", userId);
+        json.put("peer_id", peerId);
+        clientWebSOcket client = clientWebSOcket.getInstance();
+        if (client != null && client.isOpen()) {
+            client.send(json.toString());
+        }
+    }
 }
