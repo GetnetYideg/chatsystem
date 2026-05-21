@@ -62,6 +62,10 @@ public class ChatWebSocketHandler extends WebSocketServer {
                 handleFindUser(conn, json);
             } else if ("GET_HISTORY".equals(type)) {
                 handleGetHistory(conn, json);
+            } else if ("DELETE_HISTORY".equals(type)) {
+                handleDeleteHistory(conn, json);
+            } else if ("CHANGE_USERNAME".equals(type) || "CHANGE_PASSWORD".equals(type)) {
+                handleUpdateProfile(conn, json, type);
             }
         } catch (Exception e) {
             System.err.println("Failed to process message: " + e.getMessage());
@@ -173,6 +177,71 @@ public class ChatWebSocketHandler extends WebSocketServer {
         response.put("type", "HISTORY_RESPONSE");
         response.put("peer_id", userId2);
         response.put("messages", arr);
+        conn.send(response.toString());
+    }
+
+    // ── DELETE_HISTORY ────────────────────────────────────────────────────────
+    private void handleDeleteHistory(WebSocket conn, JSONObject json) {
+        int userId1 = json.optInt("user_id", -1);
+        int userId2 = json.optInt("peer_id", -1);
+        if (userId1 == -1 || userId2 == -1) return;
+
+        boolean success = chatService.deleteChatHistory(userId1, userId2);
+        JSONObject response = new JSONObject();
+        response.put("type", "DELETE_HISTORY_RESPONSE");
+        response.put("success", success);
+        conn.send(response.toString());
+    }
+
+    // ── UPDATE_PROFILE ────────────────────────────────────────────────────────
+    private void handleUpdateProfile(WebSocket conn, JSONObject json, String type) {
+        users user = sessionManager.getUser(conn);
+        JSONObject response = new JSONObject();
+        response.put("type", "UPDATE_PROFILE_RESPONSE");
+        response.put("action", type);
+
+        if (user == null) {
+            response.put("success", false);
+            response.put("message", "Not authenticated");
+            conn.send(response.toString());
+            return;
+        }
+
+        boolean success = false;
+        String message = "";
+
+        if ("CHANGE_USERNAME".equals(type)) {
+            String newUsername = json.optString("new_username", "").trim();
+            if (newUsername.isEmpty()) {
+                message = "Username cannot be empty";
+            } else if (userRepo.findByUsername(newUsername) != null) {
+                message = "Username is already taken";
+            } else {
+                success = userRepo.updateUsername(user.getId(), newUsername);
+                if (success) {
+                    user.setUsername(newUsername); // Update in session manager memory
+                    message = "Username updated successfully";
+                    response.put("new_username", newUsername);
+                } else {
+                    message = "Failed to update username in database";
+                }
+            }
+        } else if ("CHANGE_PASSWORD".equals(type)) {
+            String newPassword = json.optString("new_password", "");
+            if (newPassword.isEmpty()) {
+                message = "Password cannot be empty";
+            } else {
+                success = userRepo.updatePassword(user.getId(), newPassword);
+                if (success) {
+                    message = "Password updated successfully";
+                } else {
+                    message = "Failed to update password in database";
+                }
+            }
+        }
+
+        response.put("success", success);
+        response.put("message", message);
         conn.send(response.toString());
     }
 

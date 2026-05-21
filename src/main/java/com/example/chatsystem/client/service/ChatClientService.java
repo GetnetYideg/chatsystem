@@ -21,4 +21,14 @@ public class ChatClientService {
             client.send(json.toString());
         }
     }
+    public void requestDeleteHistory(int userId, int peerId) {
+        org.json.JSONObject json = new org.json.JSONObject();
+        json.put("type", com.example.chatsystem.client.util.Constants.MSG_TYPE_DELETE_HISTORY);
+        json.put("user_id", userId);
+        json.put("peer_id", peerId);
+        clientWebSOcket client = clientWebSOcket.getInstance();
+        if (client != null && client.isOpen()) {
+            client.send(json.toString());
+        }
+    }
 }

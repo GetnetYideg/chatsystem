@@ -71,4 +71,30 @@ public class messageRepository {
         }
         return list;
     }
+
+    /**
+     * Delete all messages exchanged between two users.
+     */
+    public boolean deleteMessagesBetween(int userId1, int userId2) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) return false;
+
+        String query = 
+            "DELETE FROM Messages " +
+            "WHERE (sender_id = ? AND receiver_id = ?) " +
+            "   OR (sender_id = ? AND receiver_id = ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, userId1);
+            pstmt.setInt(2, userId2);
+            pstmt.setInt(3, userId2);
+            pstmt.setInt(4, userId1);
+
+            int rows = pstmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

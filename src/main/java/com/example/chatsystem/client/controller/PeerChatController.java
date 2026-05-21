@@ -58,6 +58,13 @@ public class PeerChatController implements messageListener {
         javafx.application.Platform.runLater(() -> app.showDashboard());
     }
 
+    /** Delete the chat history with this peer. */
+    public void deleteHistory() {
+        userModel me = app.getCurrentUser();
+        if (me == null || peer == null) return;
+        chatService.requestDeleteHistory(me.getId(), peer.getId());
+    }
+
     // ── WebSocket callbacks ───────────────────────────────────────────────────
 
     @Override
@@ -102,6 +109,11 @@ public class PeerChatController implements messageListener {
                     screen.appendReceivedMessage(senderUsername, message);
                 }
                 // "fromMe && toPeer" is already shown optimistically on send
+            }
+        } else if (Constants.MSG_TYPE_DELETE_HISTORY_RESPONSE.equals(type)) {
+            boolean success = json.optBoolean("success", false);
+            if (success && screen != null) {
+                screen.clearMessages();
             }
         }
     }

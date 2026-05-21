@@ -22,6 +22,20 @@ public class DashboardClientService {
         send(json.toString());
     }
 
+    public void updateUsername(String newUsername) {
+        JSONObject json = new JSONObject();
+        json.put("type", Constants.MSG_TYPE_CHANGE_USERNAME);
+        json.put("new_username", newUsername);
+        send(json.toString());
+    }
+
+    public void updatePassword(String newPassword) {
+        JSONObject json = new JSONObject();
+        json.put("type", Constants.MSG_TYPE_CHANGE_PASSWORD);
+        json.put("new_password", newPassword);
+        send(json.toString());
+    }
+
     private void send(String payload) {
         clientWebSOcket client = clientWebSOcket.getInstance();
         if (client != null && client.isOpen()) {

@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import com.example.chatsystem.client.util.ThemeManager;
 
 import java.util.List;
 
@@ -29,27 +30,33 @@ public class DashboardScreen {
     public Scene getScene() {
         // ── Root: horizontal split ──────────────────────────────────────────
         HBox root = new HBox();
-        root.setStyle("-fx-background-color: #0d0d0d;");
+        root.setStyle("-fx-background-color: " + ThemeManager.getRootBackground() + ";");
 
         // ── LEFT SIDEBAR ────────────────────────────────────────────────────
         VBox sidebar = new VBox(0);
         sidebar.setPrefWidth(300);
         sidebar.setMinWidth(300);
-        sidebar.setStyle("-fx-background-color: #111827;");
+        sidebar.setStyle("-fx-background-color: " + ThemeManager.getSidebarBackground() + ";");
 
         // Sidebar header
         HBox sidebarHeader = new HBox(10);
         sidebarHeader.setPadding(new Insets(20, 16, 16, 16));
         sidebarHeader.setAlignment(Pos.CENTER_LEFT);
-        sidebarHeader.setStyle("-fx-background-color: #111827; -fx-border-color: #1f2937; -fx-border-width: 0 0 1 0;");
+        sidebarHeader.setStyle("-fx-background-color: " + ThemeManager.getSidebarBackground() + "; -fx-border-color: " + ThemeManager.getSidebarBorder() + "; -fx-border-width: 0 0 1 0;");
 
         Label appTitle = new Label("💬 ChatSystem");
         appTitle.setStyle(
-            "-fx-text-fill: #00b4d8;" +
+            "-fx-text-fill: " + ThemeManager.getAccentColor() + ";" +
             "-fx-font-size: 18px;" +
             "-fx-font-weight: bold;"
         );
-        sidebarHeader.getChildren().add(appTitle);
+        HBox.setHgrow(appTitle, Priority.ALWAYS); // Push settings button to the right
+
+        Button settingsBtn = new Button("⚙️");
+        settingsBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: " + ThemeManager.getPrimaryText() + "; -fx-cursor: hand; -fx-font-size: 16px;");
+        settingsBtn.setOnAction(e -> showSettingsDialog());
+
+        sidebarHeader.getChildren().addAll(appTitle, settingsBtn);
 
         // User profile card
         VBox profileCard = buildProfileCard();
@@ -58,14 +65,14 @@ public class DashboardScreen {
         HBox searchBox = new HBox(8);
         searchBox.setPadding(new Insets(12, 16, 12, 16));
         searchBox.setAlignment(Pos.CENTER_LEFT);
-        searchBox.setStyle("-fx-background-color: #111827;");
+        searchBox.setStyle("-fx-background-color: " + ThemeManager.getSidebarBackground() + ";");
 
         TextField searchField = new TextField();
         searchField.setPromptText("🔍  Search contacts...");
         searchField.setStyle(
-            "-fx-background-color: #1f2937;" +
-            "-fx-text-fill: #e5e7eb;" +
-            "-fx-prompt-text-fill: #6b7280;" +
+            "-fx-background-color: " + ThemeManager.getTextFieldBackground() + ";" +
+            "-fx-text-fill: " + ThemeManager.getPrimaryText() + ";" +
+            "-fx-prompt-text-fill: " + ThemeManager.getSecondaryText() + ";" +
             "-fx-font-size: 13px;" +
             "-fx-padding: 8px 12px;" +
             "-fx-background-radius: 20px;" +
@@ -80,7 +87,7 @@ public class DashboardScreen {
         contactsHeader.setPadding(new Insets(8, 16, 6, 16));
         Label contactsLabel = new Label("RECENT CHATS");
         contactsLabel.setStyle(
-            "-fx-text-fill: #6b7280;" +
+            "-fx-text-fill: " + ThemeManager.getSecondaryText() + ";" +
             "-fx-font-size: 10px;" +
             "-fx-font-weight: bold;"
         );
@@ -88,18 +95,18 @@ public class DashboardScreen {
 
         // Scrollable contact list
         contactList = new VBox(0);
-        contactList.setStyle("-fx-background-color: #111827;");
+        contactList.setStyle("-fx-background-color: " + ThemeManager.getSidebarBackground() + ";");
 
         statusLabel = new Label("Loading contacts...");
-        statusLabel.setStyle("-fx-text-fill: #6b7280; -fx-font-size: 13px; -fx-padding: 20px;");
+        statusLabel.setStyle("-fx-text-fill: " + ThemeManager.getSecondaryText() + "; -fx-font-size: 13px; -fx-padding: 20px;");
         statusLabel.setWrapText(true);
         contactList.getChildren().add(statusLabel);
 
         ScrollPane contactScroll = new ScrollPane(contactList);
         contactScroll.setFitToWidth(true);
         contactScroll.setStyle(
-            "-fx-background: #111827;" +
-            "-fx-background-color: #111827;" +
+            "-fx-background: " + ThemeManager.getSidebarBackground() + ";" +
+            "-fx-background-color: " + ThemeManager.getSidebarBackground() + ";" +
             "-fx-border-color: transparent;"
         );
         VBox.setVgrow(contactScroll, Priority.ALWAYS);
@@ -114,7 +121,7 @@ public class DashboardScreen {
         // ── RIGHT CONTENT AREA ───────────────────────────────────────────────
         VBox contentArea = new VBox();
         HBox.setHgrow(contentArea, Priority.ALWAYS);
-        contentArea.setStyle("-fx-background-color: #0d0d0d;");
+        contentArea.setStyle("-fx-background-color: " + ThemeManager.getRootBackground() + ";");
         contentArea.setAlignment(Pos.CENTER);
 
         VBox welcomeCard = new VBox(16);
@@ -127,14 +134,14 @@ public class DashboardScreen {
 
         Label welcomeTitle = new Label("Select a conversation");
         welcomeTitle.setStyle(
-            "-fx-text-fill: #e5e7eb;" +
+            "-fx-text-fill: " + ThemeManager.getPrimaryText() + ";" +
             "-fx-font-size: 22px;" +
             "-fx-font-weight: bold;"
         );
 
         Label welcomeSub = new Label("Pick a contact from the sidebar to start chatting, or search for someone new.");
         welcomeSub.setStyle(
-            "-fx-text-fill: #6b7280;" +
+            "-fx-text-fill: " + ThemeManager.getSecondaryText() + ";" +
             "-fx-font-size: 14px;"
         );
         welcomeSub.setWrapText(true);
@@ -143,7 +150,7 @@ public class DashboardScreen {
         // New chat button
         Button newChatBtn = new Button("＋  Start New Chat");
         newChatBtn.setStyle(
-            "-fx-background-color: #00b4d8;" +
+            "-fx-background-color: " + ThemeManager.getAccentColor() + ";" +
             "-fx-text-fill: white;" +
             "-fx-font-size: 14px;" +
             "-fx-font-weight: bold;" +
@@ -152,7 +159,7 @@ public class DashboardScreen {
             "-fx-cursor: hand;"
         );
         newChatBtn.setOnMouseEntered(e -> newChatBtn.setStyle(
-            "-fx-background-color: #0096c7;" +
+            "-fx-background-color: " + ThemeManager.getAccentHover() + ";" +
             "-fx-text-fill: white;" +
             "-fx-font-size: 14px;" +
             "-fx-font-weight: bold;" +
@@ -161,7 +168,7 @@ public class DashboardScreen {
             "-fx-cursor: hand;"
         ));
         newChatBtn.setOnMouseExited(e -> newChatBtn.setStyle(
-            "-fx-background-color: #00b4d8;" +
+            "-fx-background-color: " + ThemeManager.getAccentColor() + ";" +
             "-fx-text-fill: white;" +
             "-fx-font-size: 14px;" +
             "-fx-font-weight: bold;" +
@@ -187,7 +194,7 @@ public class DashboardScreen {
         VBox card = new VBox(8);
         card.setPadding(new Insets(16));
         card.setStyle(
-            "-fx-background-color: #1f2937;" +
+            "-fx-background-color: " + ThemeManager.getCardBackground() + ";" +
             "-fx-background-radius: 12px;" +
             "-fx-margin: 12px;"
         );
@@ -219,12 +226,12 @@ public class DashboardScreen {
         VBox userInfo = new VBox(3);
         Label nameLabel = new Label(username);
         nameLabel.setStyle(
-            "-fx-text-fill: #f9fafb;" +
+            "-fx-text-fill: " + ThemeManager.getPrimaryText() + ";" +
             "-fx-font-size: 15px;" +
             "-fx-font-weight: bold;"
         );
         Label idLabel = new Label("ID: " + userId);
-        idLabel.setStyle("-fx-text-fill: #9ca3af; -fx-font-size: 11px;");
+        idLabel.setStyle("-fx-text-fill: " + ThemeManager.getSecondaryText() + "; -fx-font-size: 11px;");
         Label onlineLabel = new Label("● Online");
         onlineLabel.setStyle("-fx-text-fill: #22c55e; -fx-font-size: 11px;");
         userInfo.getChildren().addAll(nameLabel, idLabel, onlineLabel);
@@ -244,7 +251,7 @@ public class DashboardScreen {
             contactList.getChildren().clear();
             if (contacts.isEmpty()) {
                 Label empty = new Label("No previous chats yet.\nStart a new conversation!");
-                empty.setStyle("-fx-text-fill: #6b7280; -fx-font-size: 13px; -fx-padding: 20px;");
+                empty.setStyle("-fx-text-fill: " + ThemeManager.getSecondaryText() + "; -fx-font-size: 13px; -fx-padding: 20px;");
                 empty.setWrapText(true);
                 contactList.getChildren().add(empty);
                 return;
@@ -278,16 +285,16 @@ public class DashboardScreen {
 
         VBox info = new VBox(3);
         Label nameLabel = new Label(contact.getUsername());
-        nameLabel.setStyle("-fx-text-fill: #f3f4f6; -fx-font-size: 14px; -fx-font-weight: bold;");
+        nameLabel.setStyle("-fx-text-fill: " + ThemeManager.getPrimaryText() + "; -fx-font-size: 14px; -fx-font-weight: bold;");
         Label subLabel = new Label("Tap to open chat");
-        subLabel.setStyle("-fx-text-fill: #6b7280; -fx-font-size: 12px;");
+        subLabel.setStyle("-fx-text-fill: " + ThemeManager.getSubLabelText() + "; -fx-font-size: 12px;");
         info.getChildren().addAll(nameLabel, subLabel);
 
         HBox.setHgrow(info, Priority.ALWAYS);
         row.getChildren().addAll(avatar, info);
 
         // Hover effects
-        row.setOnMouseEntered(e -> row.setStyle("-fx-background-color: #1f2937; -fx-cursor: hand;"));
+        row.setOnMouseEntered(e -> row.setStyle("-fx-background-color: " + ThemeManager.getSecondaryCardBackground() + "; -fx-cursor: hand;"));
         row.setOnMouseExited(e -> row.setStyle("-fx-background-color: transparent; -fx-cursor: hand;"));
         row.setOnMouseClicked(e -> controller.openChat(contact));
 
@@ -301,17 +308,17 @@ public class DashboardScreen {
         dialog.setHeaderText(null);
 
         DialogPane pane = dialog.getDialogPane();
-        pane.setStyle("-fx-background-color: #1f2937;");
+        pane.setStyle("-fx-background-color: " + ThemeManager.getDialogBackground() + ";");
 
         Label lbl = new Label("Enter Username to chat with:");
-        lbl.setStyle("-fx-text-fill: #e5e7eb; -fx-font-size: 13px;");
+        lbl.setStyle("-fx-text-fill: " + ThemeManager.getPrimaryText() + "; -fx-font-size: 13px;");
 
         TextField usernameInput = new TextField();
         usernameInput.setPromptText("Username...");
         usernameInput.setStyle(
-            "-fx-background-color: #374151;" +
-            "-fx-text-fill: white;" +
-            "-fx-prompt-text-fill: #9ca3af;" +
+            "-fx-background-color: " + ThemeManager.getTextFieldBackground() + ";" +
+            "-fx-text-fill: " + ThemeManager.getPrimaryText() + ";" +
+            "-fx-prompt-text-fill: " + ThemeManager.getSecondaryText() + ";" +
             "-fx-padding: 10px;" +
             "-fx-font-size: 13px;" +
             "-fx-background-radius: 6px;"
@@ -343,11 +350,82 @@ public class DashboardScreen {
         });
     }
 
+    private void showSettingsDialog() {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Settings");
+        dialog.setHeaderText(null);
+
+        DialogPane pane = dialog.getDialogPane();
+        pane.setStyle("-fx-background-color: " + ThemeManager.getDialogBackground() + ";");
+
+        VBox content = new VBox(20);
+        content.setPadding(new Insets(20));
+
+        // -- Profile Section --
+        Label profileLabel = new Label("Profile");
+        profileLabel.setStyle("-fx-text-fill: " + ThemeManager.getPrimaryText() + "; -fx-font-size: 16px; -fx-font-weight: bold;");
+
+        // Change Username
+        HBox usernameBox = new HBox(10);
+        usernameBox.setAlignment(Pos.CENTER_LEFT);
+        TextField newUsernameInput = new TextField();
+        newUsernameInput.setPromptText("New Username");
+        newUsernameInput.setStyle("-fx-background-color: " + ThemeManager.getTextFieldBackground() + "; -fx-text-fill: " + ThemeManager.getPrimaryText() + ";");
+        Button updateUsernameBtn = new Button("Update");
+        updateUsernameBtn.setStyle("-fx-background-color: " + ThemeManager.getAccentColor() + "; -fx-text-fill: white;");
+        updateUsernameBtn.setOnAction(e -> {
+            if (!newUsernameInput.getText().trim().isEmpty()) {
+                controller.changeUsername(newUsernameInput.getText().trim());
+                newUsernameInput.clear();
+            }
+        });
+        usernameBox.getChildren().addAll(newUsernameInput, updateUsernameBtn);
+
+        // Change Password
+        HBox passwordBox = new HBox(10);
+        passwordBox.setAlignment(Pos.CENTER_LEFT);
+        PasswordField newPasswordInput = new PasswordField();
+        newPasswordInput.setPromptText("New Password");
+        newPasswordInput.setStyle("-fx-background-color: " + ThemeManager.getTextFieldBackground() + "; -fx-text-fill: " + ThemeManager.getPrimaryText() + ";");
+        Button updatePasswordBtn = new Button("Update");
+        updatePasswordBtn.setStyle("-fx-background-color: " + ThemeManager.getAccentColor() + "; -fx-text-fill: white;");
+        updatePasswordBtn.setOnAction(e -> {
+            if (!newPasswordInput.getText().isEmpty()) {
+                controller.changePassword(newPasswordInput.getText());
+                newPasswordInput.clear();
+            }
+        });
+        passwordBox.getChildren().addAll(newPasswordInput, updatePasswordBtn);
+
+        VBox profileBox = new VBox(10, profileLabel, new Label("Change Username"), usernameBox, new Label("Change Password"), passwordBox);
+        profileBox.getChildren().get(1).setStyle("-fx-text-fill: " + ThemeManager.getSecondaryText() + ";");
+        profileBox.getChildren().get(3).setStyle("-fx-text-fill: " + ThemeManager.getSecondaryText() + ";");
+
+        content.getChildren().addAll(profileBox);
+        pane.setContent(content);
+
+        pane.getButtonTypes().add(ButtonType.CLOSE);
+        Button closeBtn = (Button) pane.lookupButton(ButtonType.CLOSE);
+        closeBtn.setStyle("-fx-background-color: " + ThemeManager.getSecondaryCardBackground() + "; -fx-text-fill: " + ThemeManager.getPrimaryText() + ";");
+
+        dialog.showAndWait();
+    }
+
     public void showError(String message) {
         Platform.runLater(() -> {
             contactList.getChildren().clear();
             statusLabel.setText(message);
             contactList.getChildren().add(statusLabel);
         });
+    }
+
+    public void showProfileUpdateResult(boolean success, String message) {
+        Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+        alert.setTitle("Profile Update");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        DialogPane pane = alert.getDialogPane();
+        pane.setStyle("-fx-background-color: " + ThemeManager.getDialogBackground() + ";");
+        alert.showAndWait();
     }
 }

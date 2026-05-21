@@ -23,4 +23,8 @@ public class ChatService {
     public List<messages> getChatHistory(int userId1, int userId2) {
         return msgRepo.getMessagesBetween(userId1, userId2);
     }
+
+    public boolean deleteChatHistory(int userId1, int userId2) {
+        return msgRepo.deleteMessagesBetween(userId1, userId2);
+    }
 }

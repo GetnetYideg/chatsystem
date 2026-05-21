@@ -21,4 +21,11 @@ public class Constants {
     // Chat history
     public static final String MSG_TYPE_GET_HISTORY       = "GET_HISTORY";
     public static final String MSG_TYPE_HISTORY_RESPONSE  = "HISTORY_RESPONSE";
+    public static final String MSG_TYPE_DELETE_HISTORY    = "DELETE_HISTORY";
+    public static final String MSG_TYPE_DELETE_HISTORY_RESPONSE = "DELETE_HISTORY_RESPONSE";
+
+    // Profile updates
+    public static final String MSG_TYPE_CHANGE_USERNAME   = "CHANGE_USERNAME";
+    public static final String MSG_TYPE_CHANGE_PASSWORD   = "CHANGE_PASSWORD";
+    public static final String MSG_TYPE_UPDATE_PROFILE_RESPONSE = "UPDATE_PROFILE_RESPONSE";
 }

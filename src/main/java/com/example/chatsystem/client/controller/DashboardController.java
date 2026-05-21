@@ -79,6 +79,14 @@ public class DashboardController implements messageListener {
         dashboardService.findUserByUsername(username);
     }
 
+    public void changeUsername(String newUsername) {
+        dashboardService.updateUsername(newUsername);
+    }
+
+    public void changePassword(String newPassword) {
+        dashboardService.updatePassword(newPassword);
+    }
+
     // ── WebSocket callbacks ───────────────────────────────────────────────────
 
     @Override
@@ -106,6 +114,23 @@ public class DashboardController implements messageListener {
             } else {
                 if (screen != null)
                     screen.showError("User \"" + json.optString("username") + "\" not found.");
+            }
+        } else if (Constants.MSG_TYPE_UPDATE_PROFILE_RESPONSE.equals(type)) {
+            boolean success = json.optBoolean("success", false);
+            String message = json.optString("message", "");
+            String action = json.optString("action", "");
+            
+            if (success && Constants.MSG_TYPE_CHANGE_USERNAME.equals(action)) {
+                String newUsername = json.optString("new_username", "");
+                if (!newUsername.isEmpty()) {
+                    app.getCurrentUser().setUsername(newUsername);
+                    // Refresh screen
+                    Platform.runLater(() -> app.showDashboard());
+                }
+            }
+            
+            if (screen != null) {
+                Platform.runLater(() -> screen.showProfileUpdateResult(success, message));
             }
         }
     }

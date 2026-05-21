@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import com.example.chatsystem.client.util.ThemeManager;
 
 public class ChatScreen {
     private ChatController controller;
@@ -18,27 +19,27 @@ public class ChatScreen {
 
     public Scene getScene() {
         VBox root = new VBox(10);
-        root.setStyle("-fx-background-color: #121212; -fx-padding: 15px;");
+        root.setStyle("-fx-background-color: " + ThemeManager.getRootBackground() + "; -fx-padding: 15px;");
 
         chatArea = new TextArea();
         chatArea.setEditable(false);
         chatArea.setWrapText(true);
         VBox.setVgrow(chatArea, Priority.ALWAYS);
         chatArea.setStyle(
-            "-fx-control-inner-background: #1e1e1e;" +
-            "-fx-text-fill: white;" +
+            "-fx-control-inner-background: " + ThemeManager.getCardBackground() + ";" +
+            "-fx-text-fill: " + ThemeManager.getPrimaryText() + ";" +
             "-fx-font-size: 14px;" +
-            "-fx-border-color: #333;" +
+            "-fx-border-color: " + ThemeManager.getSidebarBorder() + ";" +
             "-fx-border-radius: 5px;"
         );
 
         TextField inputField = new TextField();
         inputField.setPromptText("Type a message...");
-        inputField.setStyle("-fx-background-color: #2d2d2d; -fx-text-fill: white; -fx-padding: 10px;");
+        inputField.setStyle("-fx-background-color: " + ThemeManager.getTextFieldBackground() + "; -fx-text-fill: " + ThemeManager.getPrimaryText() + "; -fx-padding: 10px;");
 
         Button sendBtn = new Button("Send");
         sendBtn.setStyle(
-            "-fx-background-color: #00b4d8;" +
+            "-fx-background-color: " + ThemeManager.getAccentColor() + ";" +
             "-fx-text-fill: white;" +
             "-fx-font-weight: bold;" +
             "-fx-padding: 10px 20px;" +

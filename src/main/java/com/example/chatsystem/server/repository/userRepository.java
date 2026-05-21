@@ -90,4 +90,35 @@ public class userRepository {
         }
         return list;
     }
+    public boolean updateUsername(int userId, String newUsername) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) return false;
+        
+        String query = "UPDATE Users SET username = ? WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, newUsername);
+            pstmt.setInt(2, userId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updatePassword(int userId, String newPassword) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) return false;
+        
+        String query = "UPDATE Users SET password = ? WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, newPassword);
+            pstmt.setInt(2, userId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
