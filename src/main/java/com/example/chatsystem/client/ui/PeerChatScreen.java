@@ -27,7 +27,7 @@ public class PeerChatScreen {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: " + ThemeManager.getRootBackground() + ";");
 
-        // ── TOP BAR ────────────────────────────────────────────────────────
+        // TOP BAR
         HBox topBar = new HBox(14);
         topBar.setPadding(new Insets(14, 20, 14, 20));
         topBar.setAlignment(Pos.CENTER_LEFT);
@@ -119,7 +119,7 @@ public class PeerChatScreen {
         topBar.getChildren().addAll(backBtn, avatar, peerInfo, spacer, deleteBtn);
         root.setTop(topBar);
 
-        // ── MESSAGES AREA ─────────────────────────────────────────────────
+        // MESSAGES AREA
         messagesBox = new VBox(10);
         messagesBox.setPadding(new Insets(16));
         messagesBox.setStyle("-fx-background-color: " + ThemeManager.getRootBackground() + ";");
@@ -135,7 +135,7 @@ public class PeerChatScreen {
         scrollPane.vvalueProperty().bind(messagesBox.heightProperty());
         root.setCenter(scrollPane);
 
-        // ── INPUT BAR ─────────────────────────────────────────────────────
+        //INPUT BAR
         HBox inputBar = new HBox(10);
         inputBar.setPadding(new Insets(14, 20, 14, 20));
         inputBar.setAlignment(Pos.CENTER);

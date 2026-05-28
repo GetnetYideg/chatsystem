@@ -33,9 +33,6 @@ public class messageRepository {
         return false;
     }
 
-    /**
-     * Retrieve all messages exchanged between two users, ordered by sent time.
-     */
     public List<messages> getMessagesBetween(int userId1, int userId2) {
         List<messages> list = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -71,10 +68,7 @@ public class messageRepository {
         }
         return list;
     }
-
-    /**
-     * Delete all messages exchanged between two users.
-     */
+    
     public boolean deleteMessagesBetween(int userId1, int userId2) {
         Connection conn = DBConnection.getConnection();
         if (conn == null) return false;

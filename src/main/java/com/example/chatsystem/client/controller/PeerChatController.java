@@ -42,30 +42,28 @@ public class PeerChatController implements messageListener {
         return app.getCurrentUser();
     }
 
-    // ── Actions ───────────────────────────────────────────────────────────────
+    //Send a P2P message to the peer. 
 
-    /** Send a P2P message to the peer. */
     public void sendMessage(String text) {
         userModel me = app.getCurrentUser();
         if (me == null || peer == null) return;
         chatService.sendMessage(me.getId(), me.getUsername(), peer.getId(), text);
-        // Optimistically show our own bubble immediately
         if (screen != null) screen.appendSentMessage(text);
     }
 
-    /** Navigate back to the dashboard. */
+    //Navigate back to the dashboard.
+    
     public void goBack() {
         javafx.application.Platform.runLater(() -> app.showDashboard());
     }
 
-    /** Delete the chat history with this peer. */
+    //Delete the chat history with this peer.
+
     public void deleteHistory() {
         userModel me = app.getCurrentUser();
         if (me == null || peer == null) return;
         chatService.requestDeleteHistory(me.getId(), peer.getId());
     }
-
-    // ── WebSocket callbacks ───────────────────────────────────────────────────
 
     @Override
     public void onMessageReceived(JSONObject json) {
@@ -95,7 +93,6 @@ public class PeerChatController implements messageListener {
             String senderUsername = json.optString("sender_username", "Unknown");
             String message = json.optString("message", "");
 
-            // Only display messages that belong to THIS conversation
             userModel me = app.getCurrentUser();
             boolean fromPeer   = (senderId == peer.getId());
             boolean fromMe     = (me != null && senderId == me.getId());
@@ -108,7 +105,6 @@ public class PeerChatController implements messageListener {
                 if (fromPeer && toMe) {
                     screen.appendReceivedMessage(senderUsername, message);
                 }
-                // "fromMe && toPeer" is already shown optimistically on send
             }
         } else if (Constants.MSG_TYPE_DELETE_HISTORY_RESPONSE.equals(type)) {
             boolean success = json.optBoolean("success", false);

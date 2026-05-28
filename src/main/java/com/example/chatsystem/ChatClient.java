@@ -47,10 +47,6 @@ public class ChatClient extends Application {
         primaryStage.setTitle("ChatSystem — " + currentUser.getUsername() + " ↔ " + peer.getUsername());
     }
 
-    /**
-     * Legacy method kept so LoginController still compiles unchanged.
-     * After login, users now land on the dashboard.
-     */
     public void showChatScreen() {
         showDashboard();
     }

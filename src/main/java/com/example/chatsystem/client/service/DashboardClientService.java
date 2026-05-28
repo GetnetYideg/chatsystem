@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class DashboardClientService {
 
-    /** Ask the server for the list of users this user has chatted with. */
+    //Ask the server for the list of users this user has chatted with.
     public void requestContacts(int userId) {
         JSONObject json = new JSONObject();
         json.put("type", Constants.MSG_TYPE_GET_CONTACTS);
@@ -14,7 +14,7 @@ public class DashboardClientService {
         send(json.toString());
     }
 
-    /** Ask the server to look up a user by their username. */
+    //Ask the server to look up a user by their username. */
     public void findUserByUsername(String username) {
         JSONObject json = new JSONObject();
         json.put("type", Constants.MSG_TYPE_FIND_USER);

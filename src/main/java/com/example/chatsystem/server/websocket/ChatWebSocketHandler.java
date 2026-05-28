@@ -116,7 +116,7 @@ public class ChatWebSocketHandler extends WebSocketServer {
         }
     }
 
-    // ── GET_CONTACTS ──────────────────────────────────────────────────────────
+    //GET_CONTACTS 
     private void handleGetContacts(WebSocket conn, JSONObject json) {
         int userId = json.optInt("user_id", -1);
         if (userId == -1) return;
@@ -135,7 +135,7 @@ public class ChatWebSocketHandler extends WebSocketServer {
         conn.send(response.toString());
     }
 
-    // ── FIND_USER ─────────────────────────────────────────────────────────────
+    // FIND_USER
     private void handleFindUser(WebSocket conn, JSONObject json) {
         String username = json.optString("username", "");
         JSONObject response = new JSONObject();
@@ -157,7 +157,7 @@ public class ChatWebSocketHandler extends WebSocketServer {
         conn.send(response.toString());
     }
 
-    // ── GET_HISTORY ───────────────────────────────────────────────────────────
+    // GET_HISTORY
     private void handleGetHistory(WebSocket conn, JSONObject json) {
         int userId1 = json.optInt("user_id", -1);
         int userId2 = json.optInt("peer_id", -1);
@@ -180,7 +180,7 @@ public class ChatWebSocketHandler extends WebSocketServer {
         conn.send(response.toString());
     }
 
-    // ── DELETE_HISTORY ────────────────────────────────────────────────────────
+    //DELETE_HISTORY
     private void handleDeleteHistory(WebSocket conn, JSONObject json) {
         int userId1 = json.optInt("user_id", -1);
         int userId2 = json.optInt("peer_id", -1);
@@ -193,7 +193,7 @@ public class ChatWebSocketHandler extends WebSocketServer {
         conn.send(response.toString());
     }
 
-    // ── UPDATE_PROFILE ────────────────────────────────────────────────────────
+    //UPDATE_PROFILE
     private void handleUpdateProfile(WebSocket conn, JSONObject json, String type) {
         users user = sessionManager.getUser(conn);
         JSONObject response = new JSONObject();

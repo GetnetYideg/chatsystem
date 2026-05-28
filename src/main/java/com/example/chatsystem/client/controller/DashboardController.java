@@ -21,7 +21,7 @@ public class DashboardController implements messageListener {
     private final DashboardClientService dashboardService;
     private DashboardScreen screen;
 
-    /** Full cached list of contacts (for search filtering). */
+    // Full cached list of contacts (for search filtering).
     private List<userModel> allContacts = new ArrayList<>();
 
     public DashboardController(ChatClient app) {
@@ -41,16 +41,16 @@ public class DashboardController implements messageListener {
         return app.getCurrentUser();
     }
 
-    // ── Contact loading ───────────────────────────────────────────────────────
+    //Contact loading
 
-    /** Sends a GET_CONTACTS request to the server. */
+    //Sends a GET_CONTACTS request to the server.
     public void loadContacts() {
         userModel user = app.getCurrentUser();
         if (user == null) return;
         dashboardService.requestContacts(user.getId());
     }
 
-    /** Live-filter the cached contacts by prefix (case-insensitive). */
+    //Live-filter the cached contacts by prefix (case-insensitive). 
     public void filterContacts(String query) {
         if (screen == null) return;
         if (query == null || query.isEmpty()) {
@@ -64,9 +64,7 @@ public class DashboardController implements messageListener {
         screen.populateContacts(filtered);
     }
 
-    // ── Navigation ────────────────────────────────────────────────────────────
-
-    /** Open a P2P chat with the selected contact. */
+    //Open a P2P chat with the selected contact.
     public void openChat(userModel peer) {
         Platform.runLater(() -> app.showPeerChatScreen(peer));
     }

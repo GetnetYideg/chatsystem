@@ -118,7 +118,7 @@ public class DashboardScreen {
 
         sidebar.getChildren().addAll(sidebarHeader, profileCard, searchBox, contactsHeader, contactScroll);
 
-        // ── RIGHT CONTENT AREA ───────────────────────────────────────────────
+        // RIGHT CONTENT AREA
         VBox contentArea = new VBox();
         HBox.setHgrow(contentArea, Priority.ALWAYS);
         contentArea.setStyle("-fx-background-color: " + ThemeManager.getRootBackground() + ";");
@@ -189,7 +189,7 @@ public class DashboardScreen {
         return new Scene(root, 900, 660);
     }
 
-    // ── Profile Card ─────────────────────────────────────────────────────────
+    // Profile Card 
     private VBox buildProfileCard() {
         VBox card = new VBox(8);
         card.setPadding(new Insets(16));
@@ -245,7 +245,7 @@ public class DashboardScreen {
         return card;
     }
 
-    // ── Contact Row ──────────────────────────────────────────────────────────
+    //Contact Row 
     public void populateContacts(List<userModel> contacts) {
         Platform.runLater(() -> {
             contactList.getChildren().clear();
@@ -301,7 +301,7 @@ public class DashboardScreen {
         return row;
     }
 
-    // ── New-chat dialog ───────────────────────────────────────────────────────
+    // New-chat dialog
     private void showNewChatDialog() {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Start New Chat");
@@ -361,7 +361,7 @@ public class DashboardScreen {
         VBox content = new VBox(20);
         content.setPadding(new Insets(20));
 
-        // -- Profile Section --
+        // Profile Section
         Label profileLabel = new Label("Profile");
         profileLabel.setStyle("-fx-text-fill: " + ThemeManager.getPrimaryText() + "; -fx-font-size: 16px; -fx-font-weight: bold;");
 
