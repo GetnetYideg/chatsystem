@@ -14,7 +14,7 @@ public class DBConnection {
             try {
                 String url = dotenv.get("DB_URL", "jdbc:mysql://localhost:3306/chatsystem_db?createDatabaseIfNotExist=true");
                 String user = dotenv.get("DB_USER", "root");
-                String password = dotenv.get("DB_PASSWORD", "3y2b1sg17"); 
+                String password = dotenv.get("DB_PASSWORD"); 
                 
                 connection = DriverManager.getConnection(url, user, password);
                 System.out.println("Database connected successfully!");
